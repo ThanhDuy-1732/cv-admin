@@ -1,0 +1,44 @@
+@import '@/styles/variables.scss';
+
+.login {
+  height: fit-content;
+
+  .login__form {
+    width: 100% !important;
+    .form__item {
+      width: 400px !important;
+      max-width: 400px !important;
+
+      :deep(.ant-form-item-control-input-content) {
+        gap: 10px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .item__icon {
+        color: $black;
+      }
+
+      .item__button {
+        &.item__button--register {
+          padding: 0;
+          margin-left: 0.25rem;   
+        }
+      }
+    }
+  }
+
+  .login__more {
+    .more__button {
+      color: black;
+      min-width: 150px;
+      line-height: 1rem;
+
+      &:hover {
+        color: $white;
+      }
+    }
+  }
+}
