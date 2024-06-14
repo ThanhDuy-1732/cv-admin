@@ -1,8 +1,8 @@
-// Utilities
-import axios from 'axios';
+// Stores
+import { useHttpStore } from '@/store/http.store';
 
-const http = axios.create({
-  baseURL: import.meta.env.VITE_SERVER_API,
-});
+const httpStore = useHttpStore();
+
+const http = httpStore.instance;
 
 export { http };

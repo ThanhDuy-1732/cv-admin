@@ -1,6 +1,5 @@
-// APIs
-import { AxiosResponse } from 'axios';
-import { http } from './http';
+// Utilities
+import { AxiosInstance, AxiosResponse } from 'axios';
 
 export type LoginParam = {
   username: string,
@@ -17,10 +16,12 @@ export type getMeData = {
   user: any,
 }
 
-export const login = async (data: LoginParam): Promise<AxiosResponse<LoginData>> => {
-  return await http.post('/auth/sign-in', data);
-};
+export const authApi = (http: AxiosInstance) => ({
+  async login(data: LoginParam): Promise<AxiosResponse<LoginData>> {
+    return await http.post('/auth/sign-in', data);
+  },
 
-export const getMe = async (): Promise<AxiosResponse<getMeData>> => {
-  return await http.get('/me');
-}
+  async getMe(): Promise<AxiosResponse<getMeData>> {
+    return await http.get('/auth/me');
+  }
+})

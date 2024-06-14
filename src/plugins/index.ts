@@ -7,21 +7,20 @@
 // Plugins
 import vuetify from './vuetify'
 import router from '@/router/index';
-import { createPinia } from 'pinia';
 
 // Types
 import type { App } from 'vue';
 
 // Plugin Store
-import { deviceStorePlugin, useDeviceStore } from '@/store/device.store';
-
-const pinia = createPinia();
-pinia.use(deviceStorePlugin);
+import pinia from '@/libs/store/index';
+import { useAuthStore } from '@/store/auth.store';
+import { useDeviceStore } from '@/store/device.store';
 
 export function registerPlugins (app: App) {
   app.use(vuetify)
-      .use(router)
       .use(pinia)
+      .use(router)
 
   useDeviceStore();
+  useAuthStore();
 }

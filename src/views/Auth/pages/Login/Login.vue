@@ -74,10 +74,8 @@
   import { BrandGoogleIcon, BrandFacebookIcon } from 'vue-tabler-icons';
   import { Form as AForm, FormItem, Input as AInput, InputPassword, Button as AButton, FormProps } from 'ant-design-vue';
 
-  // APIs
-  import { login } from '@/api/auth.api';
-
   // Stores
+  import { useAuthStore } from '@/store/auth.store';
   import { useDeviceStore } from '@/store/device.store';
   
   // Types
@@ -87,6 +85,7 @@
     password: string,
   };
 
+  const authStore = useAuthStore();
   const deviceStore = useDeviceStore();
 
   const formRef = ref<FormInstance | null>(null);
@@ -99,13 +98,13 @@
   const handleFormSubmit: FormProps['onFinish'] = async () => {
     const password = CryptoJS.AES.encrypt(formState.password, formState.username).toString();
 
-    const response = await login({
+    await authStore.login({
       password,
       username: formState.username,
       userAgent: deviceStore.deviceInfo,
     });
 
-    console.log('response', response);
+    authStore.getMe();
   };
 
   const handleFormSubmitFailed: FormProps['onFinishFailed'] = errors => {

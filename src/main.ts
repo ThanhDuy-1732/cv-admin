@@ -7,6 +7,8 @@
 // Plugins
 import { registerPlugins } from '@/plugins'
 import 'ant-design-vue/dist/reset.css';
+import './index.css'
+import router from '@/router/index';
 
 // Components
 import App from './App.vue'
@@ -18,4 +20,7 @@ const app = createApp(App);
 
 registerPlugins(app)
 
-app.mount('#app')
+router.isReady().then(() => {
+  app.mount('#app');
+})
+
