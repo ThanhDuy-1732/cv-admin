@@ -1,5 +1,8 @@
 <template>
-  <router-view />
+  <div class="flex gap-1">
+    <Menu />
+    <router-view />
+  </div>
 </template>
 
 <script lang="ts" setup>

@@ -5,12 +5,13 @@ import axios, { AxiosError, AxiosInstance } from "axios";
 
 export type HttpConfig = {
   token?: string;
+  userAgent?: string;
 };
 
 type HttpState = {};
 
 type HttpGetters = {
-  instance(state?: HttpState, customConfig?: HttpConfig): AxiosInstance;
+  instance(state?: HttpState): (customConfig?: HttpConfig) => AxiosInstance;
 };
 
 type HttpActions = {};
@@ -19,7 +20,7 @@ export const useHttpStore = defineStore<"http", HttpState, HttpGetters, HttpActi
   state: () => ({}),
 
   getters: {
-    instance(state = {}, customConfig = {}) {
+    instance: (state) => (customConfig) => {
       const http = axios.create({
         baseURL: import.meta.env.VITE_SERVER_API,
         paramsSerializer: function (params) {
@@ -41,6 +42,12 @@ export const useHttpStore = defineStore<"http", HttpState, HttpGetters, HttpActi
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
           config.headers.setAuthorization(`Bearer ${accessToken}`);
+        }
+
+        console.log('customConfig', customConfig)
+
+        if (customConfig?.userAgent) {
+          config.headers.setUserAgent(customConfig?.userAgent);
         }
 
         return config;

@@ -67,6 +67,7 @@
   //  Utilities
   import * as Yup from 'yup';
   import CryptoJS from 'crypto-js';
+  import { useRouter } from 'vue-router';
   import { h, ref, reactive, computed } from 'vue';
 
   // Components
@@ -84,6 +85,8 @@
     username: string,
     password: string,
   };
+
+  const router = useRouter();
 
   const authStore = useAuthStore();
   const deviceStore = useDeviceStore();
@@ -104,7 +107,7 @@
       userAgent: deviceStore.deviceInfo,
     });
 
-    authStore.getMe();
+    router.push({ name: 'Home' });
   };
 
   const handleFormSubmitFailed: FormProps['onFinishFailed'] = errors => {
@@ -137,6 +140,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '@/styles/common.scss';
   @import './Login.scss';
+  @import '@/styles/common.scss';
 </style>

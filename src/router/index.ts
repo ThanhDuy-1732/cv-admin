@@ -40,6 +40,58 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Home',
         path: '',
         component: import(/* webpackChunkName: "Home" */ "../views/Layout/pages/Home/Home.vue"),
+      },
+      {
+        name: 'User',
+        path: 'user',
+        component: import(/* webpackChunkName: "User" */ "../views/Layout/pages/User/User.vue"),
+      },
+      {
+        name: 'Account',
+        path: 'account',
+        component: import(/* webpackChunkName: "Account" */ "../views/Layout/pages/Account/Account.vue"),
+      },
+      {
+        name: 'Data',
+        path: 'data',
+        redirect: { name: 'Information' },
+        children: [
+          {
+            name: 'Information',
+            path: 'information',
+            component: import(/* webpackChunkName: "Information" */ "../views/Layout/pages/Data/Information/Information.vue"),
+          },
+          {
+            name: 'Overview',
+            path: 'overview',
+            component: import(/* webpackChunkName: "Overview" */ "../views/Layout/pages/Data/Overview/Overview.vue"),
+          },
+          {
+            name: 'Education',
+            path: 'education',
+            component: import(/* webpackChunkName: "Education" */ "../views/Layout/pages/Data/Education/Education.vue"),
+          },
+          {
+            name: 'WorkExperience',
+            path: 'workExperience',
+            component: import(/* webpackChunkName: "WorkExperience" */ "../views/Layout/pages/Data/WorkExperience/WorkExperience.vue"),
+          },
+          {
+            name: 'Award',
+            path: 'award',
+            component: import(/* webpackChunkName: "Award" */ "../views/Layout/pages/Data/Award/Award.vue"),
+          },
+          {
+            name: 'Skills',
+            path: 'skills',
+            component: import(/* webpackChunkName: "Skills" */ "../views/Layout/pages/Data/Skills/Skills.vue"),
+          },
+          {
+            name: 'Projects',
+            path: 'projects',
+            component: import(/* webpackChunkName: "Projects" */ "../views/Layout/pages/Data/Projects/Projects.vue"),
+          }
+        ]
       }
     ],
   },

@@ -10,6 +10,7 @@ import { authApi, LoginParam } from '@/api/auth.api';
 
 // Store
 import { useHttpStore } from '@/store/http.store';
+import { useDeviceStore } from '@/store/device.store';
 
 export type AuthState = {
   user?: User | null,
@@ -23,6 +24,7 @@ export type AuthGetters = {
 
 export type AuthActions = {
   getMe(): Promise<void>;
+  logout(): Promise<void>;
   getToken(): Promise<void>;
   login(payload: LoginParam): Promise<void>;
 }
@@ -36,7 +38,9 @@ export const useAuthStore = defineStore<'auth', AuthState, AuthGetters, AuthActi
 
   getters: {
     http: () => {
-      return useHttpStore().instance;
+      return useHttpStore().instance({
+        userAgent: useDeviceStore().deviceInfo,
+      });
     }
   },
 
@@ -59,6 +63,10 @@ export const useAuthStore = defineStore<'auth', AuthState, AuthGetters, AuthActi
 
     async getToken() {
 
+    },
+
+    async logout() {
+      await authApi(this.http).logout();
     }
   }
 });

@@ -1,0 +1,11 @@
+@import '@/styles/variables.scss';
+
+.menu {
+  .menu__collapsed {
+    color: rgba(255, 255, 255, 0.65);
+
+    &:hover {
+      color: $white;
+    }
+  }
+}

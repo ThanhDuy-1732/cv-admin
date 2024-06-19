@@ -4,7 +4,7 @@ import { AxiosInstance, AxiosResponse } from 'axios';
 export type LoginParam = {
   username: string,
   password: string,
-  userAgent?: string;
+  userAgent: string;
 };
 
 export type LoginData = {
@@ -23,5 +23,9 @@ export const authApi = (http: AxiosInstance) => ({
 
   async getMe(): Promise<AxiosResponse<getMeData>> {
     return await http.get('/auth/me');
+  },
+
+  async logout(): Promise<void> {
+    return await http.get('/auth/sign-out');
   }
 })
