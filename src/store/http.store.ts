@@ -1,7 +1,14 @@
 // Utilities
+import { watch } from 'vue';
 import { defineStore } from "pinia";
 import queryString from "query-string";
-import axios, { AxiosError, AxiosInstance } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+
+// Constants
+import { HTTP_STATUS } from '@/constants/http';
+
+// Stores
+import { useAuthStore } from '@/store/auth.store';
 
 export type HttpConfig = {
   token?: string;
@@ -15,6 +22,32 @@ type HttpGetters = {
 };
 
 type HttpActions = {};
+
+const handleResponseError = async (error: AxiosError): Promise<void> => {
+  if (error.response?.status === HTTP_STATUS.UNAUTHORIZED) {
+    const authStore = useAuthStore();
+
+    if (!authStore.isRefreshingToken) {
+      authStore.getToken();
+    }
+
+    watch(
+      () => authStore.isRefreshingToken,
+      async (isRefreshingAfter, isRefreshingBefore) => {
+        if (!isRefreshingAfter && isRefreshingBefore) {
+          const originalRequest = error.config as InternalAxiosRequestConfig<any>;
+
+          originalRequest?.headers.setAuthorization(`Bearer ${authStore.accessToken}`);
+          await axios.request(originalRequest);
+        }
+      }
+    )
+
+    return;
+  }
+
+  throw new ApiError(error);
+}
 
 export const useHttpStore = defineStore<"http", HttpState, HttpGetters, HttpActions>("http", {
   state: () => ({}),
@@ -44,8 +77,6 @@ export const useHttpStore = defineStore<"http", HttpState, HttpGetters, HttpActi
           config.headers.setAuthorization(`Bearer ${accessToken}`);
         }
 
-        console.log('customConfig', customConfig)
-
         if (customConfig?.userAgent) {
           config.headers.setUserAgent(customConfig?.userAgent);
         }
@@ -53,10 +84,10 @@ export const useHttpStore = defineStore<"http", HttpState, HttpGetters, HttpActi
         return config;
       });
 
-      http.interceptors.response.use((response) => {
+      http.interceptors.response.use((response: AxiosResponse) => {
         return response;
-      }, (error) => {
-        throw new ApiError(error);
+      }, (error: AxiosError) => {
+        handleResponseError(error);
       })
 
       return http;
