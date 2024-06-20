@@ -34,11 +34,19 @@ const handleResponseError = async (error: AxiosError): Promise<void> => {
     watch(
       () => authStore.isRefreshingToken,
       async (isRefreshingAfter, isRefreshingBefore) => {
-        if (!isRefreshingAfter && isRefreshingBefore) {
+        if (isRefreshingAfter || !isRefreshingBefore) {
+          return;
+        }
+        
+        try {
           const originalRequest = error.config as InternalAxiosRequestConfig<any>;
 
           originalRequest?.headers.setAuthorization(`Bearer ${authStore.accessToken}`);
-          await axios.request(originalRequest);
+          const response = await axios.request(originalRequest);
+
+          Promise.resolve(response);
+        } catch (error) {
+          Promise.reject(error);
         }
       }
     )
