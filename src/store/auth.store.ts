@@ -24,6 +24,7 @@ export type AuthGetters = {
 }
 
 export type AuthActions = {
+  clearAuth(): void;
   getMe(): Promise<void>;
   logout(): Promise<void>;
   getToken(): Promise<void>;
@@ -81,6 +82,15 @@ export const useAuthStore = defineStore<'auth', AuthState, AuthGetters, AuthActi
 
     async logout() {
       await authApi(this.http).logout();
+    },
+
+    clearAuth() {
+      this.accessToken = '';
+      this.refreshToken = '';
+      this.isRefreshingToken = false;
+
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     }
   }
 });

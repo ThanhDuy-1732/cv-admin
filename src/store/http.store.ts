@@ -5,7 +5,7 @@ import queryString from "query-string";
 import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
 // Constants
-import { HTTP_STATUS } from '@/constants/http';
+import { HTTP_STATUS, HTTP_URL } from '@/constants/http';
 
 // Stores
 import { useAuthStore } from '@/store/auth.store';
@@ -27,6 +27,13 @@ const handleResponseError = async (error: AxiosError): Promise<void> => {
   if (error.response?.status === HTTP_STATUS.UNAUTHORIZED) {
     const authStore = useAuthStore();
 
+    if (error.config?.url === HTTP_URL.GET_TOKEN) {
+      authStore.clearAuth();
+
+      window.location.href = '/auth/login';
+      return;
+    }
+    
     if (!authStore.isRefreshingToken) {
       authStore.getToken();
     }
