@@ -20,6 +20,7 @@
 
 <script lang="ts" setup>
   // Utilities
+  import { useRouter } from 'vue-router';
   import { reactive, watch, h, computed } from 'vue';
 
   // Components
@@ -36,7 +37,9 @@
   
   // Stores
   import { useAuthStore } from '@/store/auth.store';
-  import { useDeviceStore } from '@/store/device.store';
+
+  // Constants
+  import { MENU_KEYS } from '@/constants/menu';
   
   // Types
   import { SelectInfo } from 'ant-design-vue/es/menu/src/interface';
@@ -47,8 +50,9 @@
     selectedKeys: string[];
   }
 
+  const router = useRouter();
+
   const authStore = useAuthStore();
-  const deviceStore = useDeviceStore();
 
   const state = reactive<MenuType>({
     openKeys: [],
@@ -59,71 +63,71 @@
 
   const items = reactive<ItemType[]>([
     {
-      key: '1',
-      icon: () => h(HomeOutlined),
       label: 'Home',
       title: 'home',
+      key: MENU_KEYS.HOME,
+      icon: () => h(HomeOutlined),
     },
     {
-      key: '2',
+      key: MENU_KEYS.DATA.DATA,
       icon: () => h(PieChartOutlined),
       label: 'Data',
       title: 'data',
       children: [
         {
-          key: '2-1',
           label: 'Information',
           title: 'information',
+          key: MENU_KEYS.DATA.INFORMATION,
         },
         {
-          key: '2-2',
           label: 'Overview',
           title: 'overview',
+          key: MENU_KEYS.DATA.OVERVIEW,
         },
         {
-          key: '2-3',
           label: 'Education',
           title: 'education',
+          key: MENU_KEYS.DATA.EDUCATION,
         },
         {
-          key: '2-4',
-          label: 'Work Experience',
           title: 'workExperience',
+          key: MENU_KEYS.DATA.WORK,
+          label: 'Work Experience',
         },
         {
-          key: '2-5',
+          title: 'award',
           label: 'Award',
-          title: 'award'
+          key: MENU_KEYS.DATA.AWARD,
         },
         {
-          key: '2-6',
+          title: 'skills',
           label: 'Skills',
-          title: 'skills'
+          key: MENU_KEYS.DATA.SKILLS,
         },
         {
-          key: '2-7',
           label: 'Projects',
           title: 'projects',
+          key: MENU_KEYS.DATA.PROJECTS,
         }
       ],
     },
     {
-      key: '3',
-      icon: () => h(UserSwitchOutlined),
       label: 'User',
       title: 'user',
+      key: MENU_KEYS.USER,
+      icon: () => h(UserSwitchOutlined),
     },
     {
-      key: '4',
-      icon: () => h(UserOutlined),
       label: 'Account',
       title: 'account',
+      key: MENU_KEYS.ACCOUNT,
+      icon: () => h(UserOutlined),
     },
     {
-      key: '5',
-      icon: () => h(LogoutOutlined),
       label: 'Logout',
       title: 'logout',
+      key: MENU_KEYS.LOGOUT,
+      icon: () => h(LogoutOutlined),
     }
   ]);
   
@@ -149,8 +153,38 @@
   });
 
   const handleItemMenuSelected = async (item: SelectInfo): Promise<void> => {
-    console.log('selected item', item);
-    await authStore.logout();
+    switch (item.key) {
+      case MENU_KEYS.HOME:
+      case MENU_KEYS.USER:
+      case MENU_KEYS.ACCOUNT:
+        router.push({ name: 'Home' });
+        break;
+      case MENU_KEYS.LOGOUT:
+        await authStore.logout();
+        router.push({ name: 'Login' })
+        break;
+      case MENU_KEYS.DATA.AWARD:
+        router.push({ name: 'Award' });
+        break;
+      case MENU_KEYS.DATA.EDUCATION:
+        router.push({ name: 'Education' });
+        break;
+      case MENU_KEYS.DATA.INFORMATION:
+        router.push({ name: 'Information' });
+        break;
+      case MENU_KEYS.DATA.OVERVIEW:
+        router.push({ name: 'Overview' });
+        break;
+      case MENU_KEYS.DATA.PROJECTS:
+        router.push({ name: 'Projects' });
+        break;
+      case MENU_KEYS.DATA.SKILLS:
+        router.push({ name: 'Skills' });
+        break;
+      case MENU_KEYS.DATA.WORK:
+        router.push({ name: 'WorkExperience' });
+        break;
+    }
   }
 </script>
 

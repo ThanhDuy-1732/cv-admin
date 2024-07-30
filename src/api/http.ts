@@ -1,8 +1,7 @@
-// Stores
-import { useHttpStore } from '@/store/http.store';
+import axios from "axios";
 
-const httpStore = useHttpStore();
-
-const http = httpStore.instance;
+const http = axios.create({
+  baseURL: 'http://localhost:3002',
+});
 
 export { http };

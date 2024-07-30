@@ -12,7 +12,6 @@ import { useAuthStore } from '@/store/auth.store';
 
 export type HttpConfig = {
   token?: string;
-  userAgent?: string;
 };
 
 type HttpState = {};
@@ -90,10 +89,6 @@ export const useHttpStore = defineStore<"http", HttpState, HttpGetters, HttpActi
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken) {
           config.headers.setAuthorization(`Bearer ${accessToken}`);
-        }
-
-        if (customConfig?.userAgent) {
-          config.headers.setUserAgent(customConfig?.userAgent);
         }
 
         return config;

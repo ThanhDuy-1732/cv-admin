@@ -10,7 +10,6 @@ import { authApi, LoginParam } from '@/api/auth.api';
 
 // Store
 import { useHttpStore } from '@/store/http.store';
-import { useDeviceStore } from '@/store/device.store';
 
 export type AuthState = {
   user?: User | null,
@@ -41,9 +40,7 @@ export const useAuthStore = defineStore<'auth', AuthState, AuthGetters, AuthActi
 
   getters: {
     http: () => {
-      return useHttpStore().instance({
-        userAgent: useDeviceStore().deviceInfo,
-      });
+      return useHttpStore().instance();
     }
   },
 
@@ -66,7 +63,6 @@ export const useAuthStore = defineStore<'auth', AuthState, AuthGetters, AuthActi
 
     async getToken() {
       const http = useHttpStore().instance({
-        userAgent: useDeviceStore().deviceInfo,
         token: localStorage.getItem('refreshToken') || '',
       });
 

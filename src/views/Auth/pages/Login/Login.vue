@@ -77,7 +77,6 @@
 
   // Stores
   import { useAuthStore } from '@/store/auth.store';
-  import { useDeviceStore } from '@/store/device.store';
   
   // Types
   import type { FormInstance, Rule } from 'ant-design-vue/es/form';
@@ -89,7 +88,6 @@
   const router = useRouter();
 
   const authStore = useAuthStore();
-  const deviceStore = useDeviceStore();
 
   const formRef = ref<FormInstance | null>(null);
 
@@ -104,7 +102,6 @@
     await authStore.login({
       password,
       username: formState.username,
-      userAgent: deviceStore.deviceInfo,
     });
 
     router.push({ name: 'Home' });

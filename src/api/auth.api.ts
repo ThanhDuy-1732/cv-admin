@@ -4,7 +4,6 @@ import { AxiosInstance, AxiosResponse } from 'axios';
 export type LoginParam = {
   username: string,
   password: string,
-  userAgent: string;
 };
 
 export type LoginData = {
